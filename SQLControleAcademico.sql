@@ -132,8 +132,8 @@ GO
 SELECT m.num_Mat 'Matricula', a.nome 'Aluno', dm.dado_Materia 'Disciplina', dm.nota1 '1ª Nota', dm.nota2 '2ª Nota', dm.recuperacao 'Sub.',dm.faltas 'Faltas',
     CASE
         WHEN (faltas > (carga_Hora * 0.25)) THEN 'Repr./ FALTA'
-        WHEN ((nota1 + nota2) < 10) AND (nota1 < nota2) AND (((recuperacao + nota2) / 2) < 6) THEN 'Repr./ NOTA'
-        WHEN ((nota1 + nota2) < 10) AND (nota1 > nota2) AND (((nota1 + recuperacao) / 2) < 6) THEN 'Repr./ NOTA'
+        WHEN ((nota1 + nota2) < 12) AND (nota1 < nota2) AND (((recuperacao + nota2) / 2) < 6) THEN 'Repr./ NOTA'
+        WHEN ((nota1 + nota2) < 12) AND (nota1 > nota2) AND (((nota1 + recuperacao) / 2) < 6) THEN 'Repr./ NOTA'
         ELSE 'Aprov.'
     END AS 'Situacao'
 
