@@ -89,7 +89,7 @@ SELECT m.num_Mat'Matricula', a.nome'ALuno', a.ra, dm.faltas,d.materia,o.nome 'Pr
 
 --POPULANDO NOTAS
 UPDATE DadoMateria SET nota1 = 3, nota2 = 5
-WHERE dado_NumMat = 1
+WHERE dado_NumMat = 1 AND dado_Materia = 'Matemática'
 GO
 
 UPDATE DadoMateria SET nota1 = 5, nota2 = 4
@@ -129,7 +129,7 @@ WHERE dado_NumMat = 2 AND dado_Materia = 'Matemática'
 GO
 
 --REGRA DE NEGÓCIO PARA DEFINIR SITUACAO FINAL DE SEMESTRE
-SELECT m.num_Mat 'Matricula', a.nome 'Aluno', dm.dado_Materia 'Disciplina', dm.nota1 '1ª Nota', dm.nota2 '2ª Nota', dm.recuperacao 'Sub.',dm.faltas 'Faltas',
+/*SELECT m.num_Mat 'Matricula', a.nome 'Aluno', dm.dado_Materia 'Disciplina', dm.nota1 '1ª Nota', dm.nota2 '2ª Nota', dm.recuperacao 'Sub.',dm.faltas 'Faltas', dm.Media 'Media',
     CASE
         WHEN (faltas > (carga_Hora * 0.25)) THEN 'Repr./ FALTA'
         WHEN ((nota1 + nota2) < 12) AND (nota1 < nota2) AND (((recuperacao + nota2) / 2) < 6) THEN 'Repr./ NOTA'
@@ -140,3 +140,10 @@ SELECT m.num_Mat 'Matricula', a.nome 'Aluno', dm.dado_Materia 'Disciplina', dm.n
 FROM Aluno a JOIN Matricula m ON a.ra = m.mat_RaAluno
              JOIN DadoMateria dm ON m.num_Mat = dm.dado_NumMat
              JOIN Disciplina d ON dm.dado_Materia = d.materia   
+*/
+UPDATE DadoMateria SET nota1 = 3, nota2 = 5
+WHERE dado_NumMat = 2 AND dado_Materia = 'História'
+GO
+
+SELECT * FROM DadoMateria
+GO
