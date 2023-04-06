@@ -26,7 +26,7 @@ BEGIN
 
         SELECT @status = CASE
                             WHEN (@Media >= 6) THEN 'Aprovado'
-                            ELSE 'Reprovado'
+                            ELSE 'Repro./Notas'
                          END                    
     UPDATE DadoMateria SET [status] = @status WHERE dado_Materia = @dado_Materia AND dado_NumMat = @dado_NumMat
     END
@@ -38,15 +38,21 @@ AS
 BEGIN
     IF(UPDATE (faltas))
     BEGIN
-        DECLARE @faltas INT, @status VARCHAR(19), @carga INT, @dado_NumMat INT, @dado_Materia VARCHAR(20) 
-        SELECT @faltas = faltas, @dado_Materia = dado_Materia, @dado_NumMat = dado_NumMat, @status = [status] FROM inserted
+        DECLARE @faltas INT, @status VARCHAR(19), @carga INT, @dado_NumMat INT, @dado_Materia VARCHAR(20) , @Media NUMERIC(4,2)
+        SELECT @faltas = i.faltas, @dado_Materia = i.dado_Materia, @dado_NumMat = i.dado_NumMat, @status = i.[status], @Media = i.Media 
+        FROM inserted i 
         SELECT @carga = D.carga_Hora FROM Disciplina D WHERE D.materia = @dado_Materia
 
         SET @status = CASE
-            WHEN (@faltas > (@carga * 0.25)) THEN 'Repro./ Faltas'
-            ELSE @status
+            WHEN (@faltas > (@carga * 0.25)) 
+                    THEN 'Repro./ Faltas'
+            WHEN (@faltas < (@carga * 0.25)) AND (@status = 'Repro./ Faltas') AND (@Media = null)
+                    THEN 'Matriculado'
+            WHEN (@faltas < (@carga * 0.25)) AND (@status = 'Repro./ Faltas') AND (@Media < 6)
+                    THEN 'Repro./Notas'
+            ELSE 'Aprovado'
         END
-    UPDATE DadoMateria SET [status] = @status WHERE dado_NumMat = @dado_NumMat AND dado_Materia = @dado_Materia
+        UPDATE DadoMateria SET [status] = @status WHERE dado_NumMat = @dado_NumMat AND dado_Materia = @dado_Materia
     END
 END;
 GO
